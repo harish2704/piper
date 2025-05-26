@@ -91,6 +91,9 @@ target_link_libraries(piper
 )
 
 target_link_directories(piper PUBLIC
+  ${FMT_DIR}/lib64
+  ${SPDLOG_DIR}/lib64
+  ${PIPER_PHONEMIZE_DIR}/lib64
   ${FMT_DIR}/lib
   ${SPDLOG_DIR}/lib
   ${PIPER_PHONEMIZE_DIR}/lib
@@ -123,6 +126,9 @@ target_include_directories(
 
 target_link_directories(
   test_piper PUBLIC
+  ${FMT_DIR}/lib64
+  ${SPDLOG_DIR}/lib64
+  ${PIPER_PHONEMIZE_DIR}/lib64
   ${FMT_DIR}/lib
   ${SPDLOG_DIR}/lib
   ${PIPER_PHONEMIZE_DIR}/lib
