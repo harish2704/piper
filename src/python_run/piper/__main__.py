@@ -1,6 +1,7 @@
 import argparse
 import logging
 import sys
+import os
 import time
 import wave
 from pathlib import Path
@@ -35,6 +36,11 @@ def main() -> None:
         "--output_raw",
         action="store_true",
         help="Stream raw audio to stdout",
+    )
+    parser.add_argument(
+        "-i",
+        "--input-file",
+        help="Path to input text file"
     )
     parser.add_argument(
         "-p",
@@ -120,10 +126,14 @@ def main() -> None:
         "noise_w": args.noise_w,
         "sentence_silence": args.sentence_silence,
     }
+    
+    input_file_obj = sys.stdin
+    if args.input_file and os.path.exists( args.input_file ):
+        input_file_obj = open( args.input_file, 'r')
 
     if args.output_raw:
         # Read line-by-line
-        for line in sys.stdin:
+        for line in input_file_obj:
             line = line.strip()
             if not line:
                 continue
@@ -138,7 +148,7 @@ def main() -> None:
         output_dir.mkdir(parents=True, exist_ok=True)
 
         # Read line-by-line
-        for line in sys.stdin:
+        for line in input_file_obj:
             line = line.strip()
             if not line:
                 continue
@@ -150,7 +160,7 @@ def main() -> None:
             _LOGGER.info("Wrote %s", wav_path)
     else:
         # Read entire input
-        text = sys.stdin.read()
+        text = input_file_obj.read()
 
         if (not args.output_file) or (args.output_file == "-"):
             # Write to stdout
