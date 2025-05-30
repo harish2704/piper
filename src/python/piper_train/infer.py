@@ -37,7 +37,7 @@ def main():
     model = VitsModel.load_from_checkpoint(args.checkpoint, dataset=None)
 
     # Inference only
-    model.eval()
+    model.cuda().eval()
 
     with torch.no_grad():
         model.model_g.dec.remove_weight_norm()
@@ -58,7 +58,7 @@ def main():
         sid = torch.LongTensor([speaker_id]) if speaker_id is not None else None
 
         start_time = time.perf_counter()
-        audio = model(text, text_lengths, scales, sid=sid).detach().numpy()
+        audio = model(text.cuda(), text_lengths.cuda(), scales, sid=sid).detach().cpu().numpy()
         audio = audio_float_to_int16(audio)
         end_time = time.perf_counter()
 
