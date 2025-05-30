@@ -167,6 +167,7 @@ def main():
         checkpoint_callback = ModelCheckpoint(
             every_n_epochs=args.checkpoint_epochs,
             save_top_k=args.num_ckpt,
+            save_on_train_epoch_end=True,
             monitor=args.monitor,
             mode=args.monitor_mode,
             save_last=args.save_last
