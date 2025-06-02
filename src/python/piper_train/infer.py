@@ -12,6 +12,8 @@ from .vits.lightning import VitsModel
 from .vits.utils import audio_float_to_int16
 from .vits.wavfile import write as write_wav
 
+import os
+
 _LOGGER = logging.getLogger("piper_train.infer")
 
 
@@ -22,6 +24,8 @@ def main():
     parser.add_argument(
         "--checkpoint", required=True, help="Path to model checkpoint (.ckpt)"
     )
+
+    parser.add_argument("--input_file", help="Input file path")
     parser.add_argument("--output-dir", required=True, help="Path to write WAV files")
     parser.add_argument("--sample-rate", type=int, default=22050)
     #
@@ -36,13 +40,18 @@ def main():
 
     model = VitsModel.load_from_checkpoint(args.checkpoint, dataset=None)
 
+
     # Inference only
     model.cuda().eval()
 
     with torch.no_grad():
         model.model_g.dec.remove_weight_norm()
 
-    for i, line in enumerate(sys.stdin):
+    input_file_obj = sys.stdin
+    if args.input_file and os.path.exists( args.input_file ):
+        input_file_obj = open( args.input_file, 'r')
+
+    for i, line in enumerate(input_file_obj):
         line = line.strip()
         if not line:
             continue
