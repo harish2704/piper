@@ -179,7 +179,7 @@ class VitsModel(pl.LightningModule):
                 is_multispeaker=self.hparams.num_speakers > 1,
                 segment_size=self.hparams.segment_size,
             ),
-            num_workers=11,
+            num_workers=self.hparams.num_workers,
             batch_size=self.hparams.batch_size,
         )
 
