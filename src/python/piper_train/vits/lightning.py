@@ -1,7 +1,6 @@
 import logging
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
-import os
 
 import pytorch_lightning as pl
 import torch
@@ -180,7 +179,7 @@ class VitsModel(pl.LightningModule):
                 is_multispeaker=self.hparams.num_speakers > 1,
                 segment_size=self.hparams.segment_size,
             ),
-            num_workers=os.cpu_count(),
+            num_workers=self.hparams.num_workers,
             batch_size=self.hparams.batch_size,
         )
 

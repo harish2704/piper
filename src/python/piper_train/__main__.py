@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 from pathlib import Path
+import os
 
 import torch
 from pytorch_lightning import Trainer
@@ -218,6 +219,7 @@ def main():
         num_speakers=num_speakers,
         sample_rate=sample_rate,
         dataset=[dataset_path],
+        num_workers=os.cpu_count() or 1,
         **dict_args,
     )
 
